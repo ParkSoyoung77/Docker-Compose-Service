@@ -43,7 +43,7 @@ services:
 
   # 3. Web 서비스 (Nginx)
   service-board-nginx:
-    image: soyoung0/nginx:1.29.7-board
+    image: soyoung0/nginx:board-proxy
     build:
       context: ./nginx
       dockerfile: Dockerfile

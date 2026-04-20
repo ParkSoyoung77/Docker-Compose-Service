@@ -1,6 +1,6 @@
 services:
   service-board-nginx:
-    image: soyoung0/nginx:1.29.7-board
+    image: soyoung0/nginx:board-proxy
     build:
       context: ./nginx
       dockerfile: Dockerfile
