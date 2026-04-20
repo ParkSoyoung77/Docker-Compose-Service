@@ -1,0 +1,44 @@
+# OS 임시 파일
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+
+# [보안] 환경 변수 및 비밀 키 (가장 중요)
+.env
+.env.*
+!.env.example  # 설정 예시 파일은 허용하고 싶을 때 사용
+*.pem
+*.key
+*.crt
+*.p12
+id_ed25519* # SSH 키 관련 파일 전체 차단
+
+# [Python] 컴파일 및 가상환경
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+venv/
+.venv/
+env/
+lib/
+bin/
+
+# [Docker] 빌드 및 로그
+.docker/
+*.log
+docker-compose.override.yml  # 로컬 전용 컴포즈 설정 제외
+
+# [AWS & Kubernetes] 설정 파일
+aws-auth.yaml
+build_config.json
+aws_config/
+.aws/
+.kube/
+
+# [빌드 결과물]
+/dist
+/build
+/node_modules
+/coverage
