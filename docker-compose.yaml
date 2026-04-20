@@ -1,18 +1,14 @@
 services:
   # 1. Database 서비스 (MySQL)
   service-board-mysql:
-    image: soyoung0/mysql:8.0-board
-    build:
-      context: ./mysql # MySQL 관련 파일(Dockerfile, init.sql 등)이 있는 경로
-      dockerfile: Dockerfile
-      platforms: ["linux/amd64", "linux/arm64"]
+    image: soyoung0/mysql:board-proxy  # 태그 통일
     container_name: mysql-primary-container
-    restart: unless-stopped # always(도커 엔진이 시작되면 컨테이너 재시작), unless-stopped(임의 정지시킨 컨테이너는 재시작에서 제외)
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: "ian1234!"
       MYSQL_DATABASE: "st7db"
-      MYSQL_USER: "ian"
-      MYSQL_PASSWORD: "ian1234!"
+      MYSQL_USER: "dev"                # FastAPI와 맞추기 위해 dev로 수정 권장
+      MYSQL_PASSWORD: "dev1234!"       # FastAPI와 맞추기 위해 dev1234!로 수정 권장
       TZ: "Asia/Seoul"
     ports:
       - "3306:3306"
@@ -22,16 +18,11 @@ services:
   # 2. Application 서비스 (FastAPI)
   service-board-fastapi:
     image: soyoung0/fastapi:board-proxy
-    build:
-      context: ./fastapi # FastAPI Dockerfile이 있는 현재 경로
-      dockerfile: Dockerfile
-      platforms: ["linux/amd64", "linux/arm64"]
     container_name: board-fastapi-container
     restart: always
     depends_on:
       - service-board-mysql
     environment:
-      # 코드 내 DB_INFO["host"]를 'my-service-db'로 설정해야 합니다.
       DB_HOST: "mysql-primary-container"
       DB_USER: "dev"
       DB_PASSWORD: "dev1234!"
@@ -44,10 +35,6 @@ services:
   # 3. Web 서비스 (Nginx)
   service-board-nginx:
     image: soyoung0/nginx:board-proxy
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-      platforms: ["linux/amd64", "linux/arm64"]
     container_name: board-nginx-container
     restart: always
     depends_on:

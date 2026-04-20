@@ -17,6 +17,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # [추가] MySQL 이미지 빌드 및 푸시
+      - name: Build and push MySQL
+        uses: docker/build-push-action@v5
+        with:
+          context: ./mysql
+          push: true
+          tags: soyoung0/mysql:board-proxy
+
+      # FastAPI 이미지 빌드 및 푸시
       - name: Build and push FastAPI
         uses: docker/build-push-action@v5
         with:
@@ -24,6 +33,7 @@ jobs:
           push: true
           tags: soyoung0/fastapi:board-proxy
 
+      # Nginx 이미지 빌드 및 푸시
       - name: Build and push Nginx
         uses: docker/build-push-action@v5
         with:
@@ -36,17 +46,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # 파일을 복사하기 위해 코드를 먼저 체크아웃합니다.
+        uses: actions/checkout@v4
 
-      # [중요] docker-compose.yaml 파일을 EC2로 전송하는 단계 추가
       - name: Copy docker-compose.yaml to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yaml" # 루트에 있는 컴포즈 파일
-          target: "~/ex-board"         # 대상 폴더
+          source: "docker-compose.yaml"
+          target: "~/ex-board"
 
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -55,6 +64,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            mkdir -p ~/ex-board
             cd ~/ex-board
             docker compose pull
             docker compose down --remove-orphans

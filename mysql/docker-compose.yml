@@ -2,7 +2,7 @@ services:
   service-mysql:
     # apparmor 보안 프로필을 비활성화하여 컨테이너가 호스트 시스템의 NFS 볼륨에 접근할 수 있도록 설정
     # security_opt: ["apparmor:unconfined"]
-    image: soyoung0/mysql:8.0-primary
+    image: soyoung0/mysql:board-proxy
     build:
       context: .
       dockerfile: Dockerfile

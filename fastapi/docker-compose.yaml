@@ -1,6 +1,6 @@
 services:
   service-fastapi:
-    image: soyoung0/fastapi:proxy-board
+    image: soyoung0/fastapi:board-proxy
     build:
       context: . # FastAPI Dockerfile이 있는 현재 경로
       dockerfile: Dockerfile
